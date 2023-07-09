@@ -1,13 +1,10 @@
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import Input from 'src/components/Input'
-import { getRules } from 'src/utils/rules'
+import { schema, Schema } from 'src/utils/rules'
 
-interface FormData {
-  email: string
-  password: string
-  confirm_password: string
-}
+type FormData = Schema
 
 export const Register = () => {
   const {
@@ -16,7 +13,9 @@ export const Register = () => {
     // watch,
     getValues,
     formState: { errors }
-  } = useForm<FormData>()
+  } = useForm<FormData>({
+    resolver: yupResolver(schema)
+  })
   const onSubmit = handleSubmit(
     (data) => {
       console.log(data)
@@ -26,7 +25,6 @@ export const Register = () => {
     //   const password = getValues('password')
     // }
   )
-  const rules = getRules(getValues)
   // console.log('errors', errors)
   return (
     <div className='bg-orange-600'>
@@ -42,7 +40,6 @@ export const Register = () => {
                 className='mt-8'
                 errorMessage={errors.email?.message}
                 placeholder='Email'
-                rules={rules.email}
               />
               <Input
                 name='password'
@@ -51,7 +48,6 @@ export const Register = () => {
                 className='mt-2'
                 errorMessage={errors.password?.message}
                 placeholder='Password'
-                rules={rules.password}
               />
               <Input
                 name='confirm_password'
@@ -60,7 +56,6 @@ export const Register = () => {
                 className='mt-2'
                 errorMessage={errors.confirm_password?.message}
                 placeholder='Confirm password'
-                rules={rules.confirm_passowrd}
               />
               <div className='mt-2'>
                 <button className='w-full text-center py-4 px-2 uppercase bg-red-500 text-white text-sm hover:bg-red-600'>
