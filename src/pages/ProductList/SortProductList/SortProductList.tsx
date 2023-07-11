@@ -16,7 +16,7 @@ export default function SortProductList() {
           <select
             name=''
             id=''
-            value=''
+            defaultValue=''
             className='h-8 px-4 capitalize bg-white text-black text-sm hover:bg-slate-100 text-left outline-none'
           >
             <option value='' disabled>
