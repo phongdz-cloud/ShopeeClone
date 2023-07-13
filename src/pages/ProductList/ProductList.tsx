@@ -4,16 +4,18 @@ import Product from './Product'
 import SortProductList from './SortProductList'
 import useQueryParams from 'src/hooks/useQueryParams'
 import productApi from 'src/apis/product.api'
+import Pagination from 'src/components/Pagination'
+import { useState } from 'react'
 
 export const ProductList = () => {
   const queryParams = useQueryParams()
+  const [page, setPage] = useState(1)
   const { data } = useQuery({
     queryKey: ['products', queryParams],
     queryFn: () => {
       return productApi.getProducts(queryParams)
     }
   })
-  console.log('queryParams', queryParams)
   return (
     <div className='bg-gray-200 py-6'>
       <div className='container'>
@@ -24,14 +26,14 @@ export const ProductList = () => {
           <div className='col-span-9'>
             <SortProductList />
             <div className='mt-6 grid grid-cols-2 md:grid-cols-6 lg:grid-cols-4 xl:grid-cols-5 gap-3'>
-              {Array(30)
-                .fill(0)
-                .map((_, index) => (
-                  <div className='col-span-1' key={index}>
-                    <Product />
+              {data &&
+                data.data.data.products.map((product, index) => (
+                  <div className='col-span-1' key={product._id}>
+                    <Product product={product} />
                   </div>
                 ))}
             </div>
+            <Pagination page={page} setPage={setPage} pageSize={20} />
           </div>
         </div>
       </div>
